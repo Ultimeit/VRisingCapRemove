@@ -47,6 +47,9 @@ DWORD WINAPI ScanThread(LPVOID lpThreadParameter)
 
                 VirtualProtect((void*)instruction.runtime_address, instruction.info.length, oriProtect, &oriProtect);
             }
+
+            if (instruction.info.mnemonic == ZydisMnemonic::ZYDIS_MNEMONIC_RET)
+                break;
         }
     }
     
