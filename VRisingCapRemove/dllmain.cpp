@@ -37,7 +37,8 @@ DWORD WINAPI ScanThread(LPVOID lpThreadParameter)
             offset += instruction.info.length;
             currentZydisAddr += instruction.info.length;
 
-            if (instruction.info.mnemonic == ZydisMnemonic::ZYDIS_MNEMONIC_COMISS && instruction.operands[1].reg.value == ZydisRegister::ZYDIS_REGISTER_XMM6)   // Scanning for patters probably would've been more efficient, but I wanted to try out Zydis for the first time.
+            if (instruction.info.mnemonic == ZydisMnemonic::ZYDIS_MNEMONIC_COMISS && 
+                (instruction.operands[1].reg.value == ZydisRegister::ZYDIS_REGISTER_XMM6 || instruction.operands[1].reg.value == ZydisRegister::ZYDIS_REGISTER_XMM2))   // Scanning for patters probably would've been more efficient, but I wanted to try out Zydis for the first time.
             {
                 DWORD oriProtect;
                 VirtualProtect((void*)instruction.runtime_address, instruction.info.length, PAGE_EXECUTE_READWRITE, &oriProtect);
