@@ -22,7 +22,7 @@ DWORD WINAPI ScanThread(LPVOID lpThreadParameter)
     const DWORD sizeOfImage = NtHeaders->OptionalHeader.SizeOfImage;
 
     //ServerGameBalanceSettings ServerGameSettings::ToStruct(bool log)
-    ZyanU8* funcAddr = LightningScanner::Scanner("C6 05 ?? ?? ?? ?? ?? 48 8D ?? 04 33 D2 41 B8 94 05 00 00").Find(hMod, sizeOfImage).Get<ZyanU8>();
+    ZyanU8* funcAddr = LightningScanner::Scanner("33 D2 41 B8 94 05 00 00 E8").Find(hMod, sizeOfImage).Get<ZyanU8>();
 
     if (funcAddr)
     {
