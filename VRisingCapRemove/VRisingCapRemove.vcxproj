@@ -65,10 +65,20 @@
     <ClCompile Include="libs\LightningScanner\backends\Sse42.cpp" />
     <ClCompile Include="libs\LightningScanner\backends\StdFind.cpp" />
     <ClCompile Include="libs\LightningScanner\CpuInfo.cpp" />
-    <ClCompile Include="libs\Zydis.c" />
+    <ClCompile Include="libs\MinHook\Src\buffer.c" />
+    <ClCompile Include="libs\MinHook\Src\hde\hde64.c" />
+    <ClCompile Include="libs\MinHook\Src\hook.c" />
+    <ClCompile Include="libs\MinHook\Src\trampoline.c" />
   </ItemGroup>
   <ItemGroup>
     <MASM Include="version\version_asm.asm" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="libs\MinHook\Src\buffer.h" />
+    <ClInclude Include="libs\MinHook\Src\hde\hde64.h" />
+    <ClInclude Include="libs\MinHook\Src\hde\pstdint.h" />
+    <ClInclude Include="libs\MinHook\Src\hde\table64.h" />
+    <ClInclude Include="libs\MinHook\Src\trampoline.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

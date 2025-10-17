@@ -12,11 +12,11 @@
     <Filter Include="Source Files\LightningScnaner">
       <UniqueIdentifier>{c715432b-b1e0-4bb9-9f5c-747316d1aac9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Zydis">
-      <UniqueIdentifier>{9a4b299b-9adb-4310-b922-37cf389d9ceb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\wrapper">
       <UniqueIdentifier>{a35a7edd-6d99-459e-8d55-d96a24e2f473}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MinHook">
+      <UniqueIdentifier>{e94271e1-0d64-4eb6-b5ba-5b026d61661d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -38,13 +38,39 @@
     <ClCompile Include="libs\LightningScanner\backends\StdFind.cpp">
       <Filter>Source Files\LightningScnaner</Filter>
     </ClCompile>
-    <ClCompile Include="libs\Zydis.c">
-      <Filter>Source Files\Zydis</Filter>
+    <ClCompile Include="libs\MinHook\Src\buffer.c">
+      <Filter>Source Files\MinHook</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\MinHook\Src\hook.c">
+      <Filter>Source Files\MinHook</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\MinHook\Src\trampoline.c">
+      <Filter>Source Files\MinHook</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\MinHook\Src\hde\hde64.c">
+      <Filter>Source Files\MinHook</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="version\version_asm.asm">
       <Filter>Source Files\wrapper</Filter>
     </MASM>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="libs\MinHook\Src\buffer.h">
+      <Filter>Source Files\MinHook</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\MinHook\Src\trampoline.h">
+      <Filter>Source Files\MinHook</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\MinHook\Src\hde\hde64.h">
+      <Filter>Source Files\MinHook</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\MinHook\Src\hde\pstdint.h">
+      <Filter>Source Files\MinHook</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\MinHook\Src\hde\table64.h">
+      <Filter>Source Files\MinHook</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

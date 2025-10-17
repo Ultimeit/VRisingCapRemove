@@ -1,12 +1,21 @@
-#include "version/version.h"
+﻿#include "version/version.h"
 #include <chrono>
 #include <thread>
-#include <Zydis.h>
 #include <LightningScanner/LightningScanner.hpp>
+#include <MinHook/include/MinHook.h>
 
 //#pragma comment(lib, "LightningScanner/LightningScanner143md")
 
 using namespace std;
+
+uint16_t(*SettingsClamp_Half_o)(float val, float min, float max, void* fieldName) = nullptr;
+uint16_t hook_SettingsClamp_Half(float val, float min, float max, void* fieldName)
+{
+    min = 0;
+    max = val;
+
+    return SettingsClamp_Half_o(val, min, max, fieldName);
+}
 
 DWORD WINAPI ScanThread(LPVOID lpThreadParameter)
 {
@@ -21,36 +30,14 @@ DWORD WINAPI ScanThread(LPVOID lpThreadParameter)
     const IMAGE_NT_HEADERS* NtHeaders = reinterpret_cast<IMAGE_NT_HEADERS*>(reinterpret_cast<long long>(hMod) + DOSHeader->e_lfanew);
     const DWORD sizeOfImage = NtHeaders->OptionalHeader.SizeOfImage;
 
-    //ServerGameBalanceSettings ServerGameSettings::ToStruct(bool log)
-    ZyanU8* funcAddr = LightningScanner::Scanner("33 D2 41 B8 94 05 00 00 E8").Find(hMod, sizeOfImage).Get<ZyanU8>();
+    //SettingsClamp::Half(float value, float min, float max, string fieldName)
+    void* funcAddr = LightningScanner::Scanner("40 57 48 83 EC 60 80 3D ?? ?? ?? ?? ?? 49 8B").Find(hMod, sizeOfImage).Get<void>();
 
     if (funcAddr)
     {
-        ZyanU64 currentZydisAddr = (ZyanU64)funcAddr;
-        ZyanUSize offset = 0;
-
-        const int funcSize = 0x1500;    // It works as is and I'm too lazy to make something less dumb
-
-        ZydisDisassembledInstruction instruction;
-        while (ZYAN_SUCCESS(ZydisDisassembleIntel(ZYDIS_MACHINE_MODE_LONG_64, currentZydisAddr, funcAddr + offset, funcSize - offset, &instruction)))
-        {
-            offset += instruction.info.length;
-            currentZydisAddr += instruction.info.length;
-
-            if (instruction.info.mnemonic == ZydisMnemonic::ZYDIS_MNEMONIC_COMISS && 
-                (instruction.operands[1].reg.value == ZydisRegister::ZYDIS_REGISTER_XMM6 || instruction.operands[1].reg.value == ZydisRegister::ZYDIS_REGISTER_XMM2))   // Scanning for patters probably would've been more efficient, but I wanted to try out Zydis for the first time.
-            {
-                DWORD oriProtect;
-                VirtualProtect((void*)instruction.runtime_address, instruction.info.length, PAGE_EXECUTE_READWRITE, &oriProtect);
-
-                FillMemory((void*)instruction.runtime_address, instruction.info.length, 0x90);
-
-                VirtualProtect((void*)instruction.runtime_address, instruction.info.length, oriProtect, &oriProtect);
-            }
-
-            if (instruction.info.mnemonic == ZydisMnemonic::ZYDIS_MNEMONIC_RET)
-                break;
-        }
+        MH_Initialize();
+        MH_CreateHook(funcAddr, &hook_SettingsClamp_Half, (void**)&SettingsClamp_Half_o);
+        MH_EnableHook(funcAddr);
     }
     
     return TRUE;
